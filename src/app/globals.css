@@ -5,3 +5,13 @@
 body {
   @apply bg-white text-slate-900;
 }
+
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+
+  h2 {
+    @apply text-xl;
+  }
+}
