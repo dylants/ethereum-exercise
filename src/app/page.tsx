@@ -1,11 +1,11 @@
 'use client';
 
-import Account from '@/app/Account';
+import EnsLookup from '@/app/EnsLookup';
 
 export default function App() {
   return (
     <>
-      <Account />
+      <EnsLookup />
     </>
   );
 }
