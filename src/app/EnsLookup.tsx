@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useCallback, useState } from 'react';
@@ -21,19 +22,31 @@ export default function EnsLookup() {
     handleSubmit,
     register,
     reset,
-  } = useForm<EnsFormInput>();
+  } = useForm<EnsFormInput>({
+    values: {
+      address: '' as `0x${string}`,
+    },
+  });
 
   const onSubmit = useCallback(
     (data: EnsFormInput) => {
-      setAddress(data.address);
-      reset();
+      if (data) {
+        setAddress(data.address);
+        reset();
+      }
     },
     [reset],
   );
 
-  const { data: ensName } = useEnsName({ address });
-  const { data: ensAvatar } = useEnsAvatar({ name: normalize(ensName || '') });
-  const { data: ensBalance } = useBalance({ address });
+  const { data: ensName, isFetched: isFetchedEnsName } = useEnsName({
+    address,
+  });
+  const { data: ensAvatar, isFetched: isFetchedAvatar } = useEnsAvatar({
+    name: normalize(ensName || ''),
+  });
+  const { data: ensBalance, isFetched: isFetchedBalance } = useBalance({
+    address,
+  });
 
   return (
     <div className="flex gap-12">
@@ -68,31 +81,47 @@ export default function EnsLookup() {
           </form>
         </div>
       </div>
-      <div className="flex items-center gap-3">
-        <div className="border rounded-full border-slate-50 p-2 shadow-md">
-          {ensAvatar ? (
-            <Image
-              alt="ENS Avatar"
-              src={ensAvatar}
-              width={64}
-              height={64}
-              className="rounded-full"
-            />
-          ) : (
-            <div className="border rounded-full w-[64px] h-[64px] flex justify-center items-center text-xs">
-              No Image
-            </div>
-          )}
-        </div>
-        <div className="flex flex-col">
-          <div className="font-bold text-xl">{ensName || 'ENS domain'}</div>
-          <div className="text-xs">
-            {ensBalance
-              ? `${ensBalance.symbol} ${ensBalance.value}`
-              : 'Balance'}
+      {address && (
+        <div className="flex items-center gap-3">
+          <div className="border rounded-full border-slate-50 p-2 shadow-md">
+            {!isFetchedAvatar ? (
+              <Skeleton className="h-[64px] w-[64px] rounded-full" />
+            ) : (
+              <>
+                {ensAvatar ? (
+                  <Image
+                    alt="ENS Avatar"
+                    src={ensAvatar}
+                    width={64}
+                    height={64}
+                    className="rounded-full"
+                  />
+                ) : (
+                  <div className="border rounded-full w-[64px] h-[64px] flex justify-center items-center text-xs">
+                    No Image
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+          <div className="flex flex-col w-[300px] gap-1">
+            {!isFetchedEnsName ? (
+              <Skeleton className="h-7 w-full" />
+            ) : (
+              <div className="font-bold text-xl">{ensName || 'Unknown'}</div>
+            )}
+            {!isFetchedBalance ? (
+              <Skeleton className="h-4 w-full" />
+            ) : (
+              <div className="text-xs">
+                {ensBalance
+                  ? `${ensBalance.symbol} ${ensBalance.value}`
+                  : 'Unknown balance'}
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
