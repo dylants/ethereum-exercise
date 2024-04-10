@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import clsx from 'clsx';
+import jazzicon from 'jazzicon-ts';
 import Image from 'next/image';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { normalize } from 'viem/ens';
 import { useBalance, useEnsAvatar, useEnsName } from 'wagmi';
@@ -16,6 +17,7 @@ export type EnsFormInput = {
 
 export default function EnsLookup() {
   const [address, setAddress] = useState<`0x${string}` | undefined>();
+  const htmlDivRef = useRef<HTMLDivElement>(null);
 
   const {
     formState: { errors },
@@ -47,6 +49,13 @@ export default function EnsLookup() {
   const { data: ensBalance, isFetched: isFetchedBalance } = useBalance({
     address,
   });
+
+  useEffect(() => {
+    if (address && htmlDivRef.current) {
+      const icon = jazzicon(64, parseInt(address.slice(2, 10), 16));
+      htmlDivRef.current.replaceChildren(icon);
+    }
+  }, [address, ensAvatar]);
 
   return (
     <div className="flex gap-12">
@@ -97,9 +106,10 @@ export default function EnsLookup() {
                     className="rounded-full"
                   />
                 ) : (
-                  <div className="border rounded-full w-[64px] h-[64px] flex justify-center items-center text-xs">
-                    No Image
-                  </div>
+                  <div
+                    className="border rounded-full w-[64px] h-[64px] flex justify-center items-center text-xs"
+                    ref={htmlDivRef}
+                  />
                 )}
               </>
             )}
