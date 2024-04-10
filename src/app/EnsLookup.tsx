@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import clsx from 'clsx';
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useEnsName } from 'wagmi';
@@ -32,27 +33,36 @@ export default function EnsLookup() {
 
   return (
     <div className="flex gap-8">
-      <div className="flex flex-col border border-slate-400 rounded p-4 w-[300px]">
-        <h2 className="font-bold">Find an ENS</h2>
+      <div
+        className={clsx(
+          // width = width + 2 * padding
+          `flex flex-col p-[6px] w-[312px] rounded-lg`,
+          // borrowed heavily from: https://codepen.io/unnegative/pen/dVwYBq
+          '[background-image:linear-gradient(to_bottom_right,#b827fc_0,#2c90fc_25%,#b8fd33_50%,#fec837_75%,#fd1892_100%)]',
+        )}
+      >
+        <div className="flex flex-col p-4 w-[300px] bg-white rounded-lg">
+          <h2 className="font-bold">Find an ENS</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col gap-2 mt-4">
-            <div>
-              <label className="text-sm" htmlFor="address">
-                Address:
-              </label>
-              <Input
-                type="text"
-                placeholder="0x12345..."
-                variant={errors.address ? 'error' : 'default'}
-                {...register('address', { required: true })}
-              />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex flex-col gap-2 mt-4">
+              <div>
+                <label className="text-sm" htmlFor="address">
+                  Address:
+                </label>
+                <Input
+                  type="text"
+                  placeholder="0x12345..."
+                  variant={errors.address ? 'error' : 'default'}
+                  {...register('address', { required: true })}
+                />
+              </div>
+              <Button variant="default" type="submit">
+                Submit
+              </Button>
             </div>
-            <Button variant="default" type="submit">
-              Submit
-            </Button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
       <div>{ensName && <div>ENS name: {ensName}</div>}</div>
     </div>
