@@ -3,9 +3,11 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import clsx from 'clsx';
+import Image from 'next/image';
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useEnsName } from 'wagmi';
+import { normalize } from 'viem/ens';
+import { useBalance, useEnsAvatar, useEnsName } from 'wagmi';
 
 export type EnsFormInput = {
   address: `0x${string}`;
@@ -30,9 +32,11 @@ export default function EnsLookup() {
   );
 
   const { data: ensName } = useEnsName({ address });
+  const { data: ensAvatar } = useEnsAvatar({ name: normalize(ensName || '') });
+  const { data: ensBalance } = useBalance({ address });
 
   return (
-    <div className="flex gap-8">
+    <div className="flex gap-12">
       <div
         className={clsx(
           // width = width + 2 * padding
@@ -64,7 +68,31 @@ export default function EnsLookup() {
           </form>
         </div>
       </div>
-      <div>{ensName && <div>ENS name: {ensName}</div>}</div>
+      <div className="flex items-center gap-3">
+        <div className="border rounded-full border-slate-50 p-2 shadow-md">
+          {ensAvatar ? (
+            <Image
+              alt="ENS Avatar"
+              src={ensAvatar}
+              width={64}
+              height={64}
+              className="rounded-full"
+            />
+          ) : (
+            <div className="border rounded-full w-[64px] h-[64px] flex justify-center items-center text-xs">
+              No Image
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col">
+          <div className="font-bold text-xl">{ensName || 'ENS domain'}</div>
+          <div className="text-xs">
+            {ensBalance
+              ? `${ensBalance.symbol} ${ensBalance.value}`
+              : 'Balance'}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
