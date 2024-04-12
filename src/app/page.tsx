@@ -1,6 +1,6 @@
 'use client';
 
-import EnsLookup from '@/app/EnsLookup';
+import EnsLookup from '@/components/EnsLookup';
 
 export default function App() {
   return (
