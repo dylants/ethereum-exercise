@@ -35,7 +35,7 @@ export default function EnsLookup() {
   );
 
   return (
-    <div className="flex gap-12">
+    <div className="flex justify-center gap-12">
       <div
         className={clsx(
           // width = width of inner div + 2 * padding

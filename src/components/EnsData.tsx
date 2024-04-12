@@ -55,7 +55,7 @@ export default function EnsData({ address }: EnsDataProps) {
           </>
         )}
       </div>
-      <div className="flex flex-col w-[300px] gap-1">
+      <div className="flex flex-col w-[200px] gap-1">
         {!isFetchedEnsName ? (
           <Skeleton className="h-7 w-full" />
         ) : (
