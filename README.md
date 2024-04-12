@@ -72,9 +72,9 @@ The EnsLookup component uses a combination of React hooks from [Wagmi](https://w
 
 ### Concerns / Limitations
 
-- Multiple designs were provided within the exercise description, one in the PDF and one in the Figma link. Both were similar, but implementation was done based on a "combination" of the two. Hope that is okay :)
-- Prior to the lookup, there is no validation done on the Ethereum address provided as input. It is expected to be valid. (Though the field is required.)
-- In some situations, it has been observed that [useEnsAvatar](https://wagmi-xyz.vercel.app/react/api/hooks/useEnsAvatar) never returns (so is in a continual state of loading) when an avatar does not exist. Not sure if this is a bug or an invalid Ethereum account.
+- There were multiple designs provided within the exercise description, one in the PDF and one in the Figma link. Both were similar, but implementation was done based on a "combination" of the two. Hope that's okay :)
+- Prior to the lookup, there is no validation done on the Ethereum address provided as input by the user. It is expected to be valid. (Though the field is required.)
+- In some situations, it has been observed that [useEnsAvatar](https://wagmi-xyz.vercel.app/react/api/hooks/useEnsAvatar) never returns when an avatar does not exist (so is in a continual state of loading). Not sure if this is a bug or an invalid Ethereum account.
 
 ### Given more time...
 
@@ -88,34 +88,28 @@ With more time, I would recommend:
 
 ## Wallet Lookup
 
-Allows the user to connect a wallet. Once connected, uses the first address to lookup ENS data and display the following:
-
-- The ENS domain
-  - If not found, "Unknown" is displayed
-- The ENS avatar
-  - If one does not exist, a [jazzicon](https://github.com/mirshko/jazzicon-ts) is displayed (this wasn't directly mentioned in the design, but seemed appropriate?)
-- The ETH balance
-  - If not found, "Unknown balance" is displayed
+Allows the user to connect a wallet. Once connected, uses the first address to lookup and display ENS data. Then allows the user to verify themselves by signing a message.
 
 ### Technical Details
 
-The ConnectWallet component uses a combination of React hooks from [Wagmi](https://wagmi-xyz.vercel.app/react/api/hooks), and UI components from [shadcn](https://ui.shadcn.com/docs). Once connected, the EnsData shared component is displayed, similar to the ENS Lookup page described above. This is limited to only injected wallets at this time (so MetaMask is available).
+The ConnectWallet component uses a similar combination of React hooks from Wagmi and UI components, along with a backend API. Once the wallet is connected, the EnsData UI component is displayed, similar to the ENS Lookup page. This flow is limited to only injected wallet types at this time (so MetaMask is available).
+
+The verify user flow is an additional step the user must take (see more details in the notes below as to why). The UI prompts the user to sign a message, which is then sent to the backend `verify` API to process, and if successful, displays to the user they are verified.
 
 ### Concerns / Limitations
 
 - Only the first wallet address is used
-- As mentioned in the overall notes section below, the API call did not seem necessary to provide the ENS details since we're connecting a wallet?
-- This page has the same ENS details limitation as the ENS Lookup page
+- The API call did not seem necessary to provide the ENS details since we're connecting a wallet? I discussed this in more detail in the Overall Notes section below.
 
 ### Given more time...
 
 With more time, I would recommend:
 
-- Address the same points mentioned above for ENS Lookup page
-- Resolve the API use case and user flow to determine how best to fit in
+- Addressing the same points mentioned above for the ENS Lookup page
+- Resolving the API use case and user flow to determine how to best fit it in
 - Include additional wallet types
 - Add loading states when performing operations (while signing and verifying)
-- Add tests for user flow
+- Add Playwright tests for the UI flow
 - Improve error handling
 
 ## Overall Notes
