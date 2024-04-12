@@ -37,9 +37,9 @@ export default function Nav() {
         <TextSearchIcon size={14} />
         ENS Lookup
       </NavLink>
-      <NavLink path="/user-lookup">
+      <NavLink path="/wallet-lookup">
         <UserSearchIcon size={14} />
-        User Lookup
+        Wallet Lookup
       </NavLink>
     </nav>
   );

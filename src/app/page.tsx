@@ -32,9 +32,9 @@ export default function App() {
               <TextSearchIcon size={14} />
               ENS Lookup
             </NavLink>
-            <NavLink path="/user-lookup">
+            <NavLink path="/wallet-lookup">
               <UserSearchIcon size={14} />
-              User Lookup
+              Wallet Lookup
             </NavLink>
           </div>
         </div>
