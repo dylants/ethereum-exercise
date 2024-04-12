@@ -5,8 +5,8 @@ import { type ReactNode } from 'react';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {
-  description: 'Wagmi Exercise',
-  title: 'wagmi-exercise',
+  description: 'Ethereum Exercise',
+  title: 'ethereum-exercise',
 };
 
 export default function RootLayout(props: { children: ReactNode }) {
